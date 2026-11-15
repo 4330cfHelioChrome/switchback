@@ -126,30 +126,37 @@ io.on('connection', (socket) => {
   });
 
   // 5. 게임 시작
+
+  // 4. 게임 시작
   socket.on('startGame', ({ roomId }) => {
     const room = rooms.get(roomId);
     if (!room) return socket.emit('error', 'Room not found.');
     if (room.hostId !== socket.id) return socket.emit('error', 'Only the host can start the game.');
 
-    const P = room.players.length;
     const T = room.totalCards;
-    const handSize = Math.floor(T / P);
+    const initialHandSize = 8; // 💡 시작 시 손에 들고 있을 카드 수 (조절 가능)
 
+    // 전체 카드 덱 생성 (1부터 T까지)
     let deck = Array.from({ length: T }, (_, i) => i + 1);
     deck = shuffleDeck(deck);
 
+    // 각 플레이어에게 지정된 초기 카드 수만큼 나눠주기
     room.players.forEach(player => {
-      player.hand = deck.splice(0, handSize).sort((a, b) => a - b);
+      player.hand = deck.splice(0, initialHandSize).sort((a, b) => a - b);
     });
 
+    // 덱에서 카드를 하나 뽑아 중앙 카드(Center Pile)로 설정
     const startingCard = deck.pop();
-    const midpoint = T / 2;
+
     room.deck = deck;
     room.centerPile = startingCard;
-    room.direction = startingCard <= midpoint ? 'ascending' : 'descending';
+    
+    // 💡 방향을 완전히 랜덤하게 설정 (오름차순 혹은 내림차순)
+    room.direction = Math.random() < 0.5 ? 'ascending' : 'descending';
     room.status = 'playing';
     room.turnIndex = 0;
 
+    // 게임 시작 상태 브로드캐스트
     io.to(roomId).emit('gameStarted', {
       centerPile: room.centerPile,
       direction: room.direction,
@@ -162,6 +169,45 @@ io.on('connection', (socket) => {
     });
 
     broadcastRoomList();
+    console.log(`Game started in room ${roomId} | Center: ${startingCard} | Direction: ${room.direction}`);
+  });
+
+  // 💡 카드 한 장 더 가져오기 (Draw Card) 기능 추가
+  socket.on('drawCard', ({ roomId }) => {
+    const room = rooms.get(roomId);
+    if (!room || room.status !== 'playing') return;
+
+    const currentPlayer = room.players[room.turnIndex];
+    if (currentPlayer.id !== socket.id) {
+      return socket.emit('error', 'Not your turn!');
+    }
+
+    if (room.deck.length === 0) {
+      return socket.emit('error', 'The deck is empty!');
+    }
+
+    // 덱에서 카드 한 장 뽑아서 플레이어 핸드에 추가
+    const drawnCard = room.deck.pop();
+    currentPlayer.hand.push(drawnCard);
+    currentPlayer.hand.sort((a, b) => a - b);
+
+    // 카드 뽑기를 수행하면 턴이 다음 사람으로 넘어감 (원하는 경우 턴 유지로 변경 가능)
+    room.turnIndex = (room.turnIndex + 1) % room.players.length;
+
+    io.to(roomId).emit('gameStateUpdate', {
+      centerPile: room.centerPile,
+      direction: room.direction,
+      turnIndex: room.turnIndex,
+      players: room.players.map(p => ({ id: p.id, name: p.name, cardCount: p.hand.length }))
+    });
+
+    io.to(currentPlayer.id).emit('updateHand', currentPlayer.hand);
+
+    io.to(roomId).emit('receivePlayerMessage', {
+      sender: 'System',
+      text: `${currentPlayer.name} drew an extra card from the deck.`,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
   });
 
   // 카드 내기 및 규칙 검증

@@ -370,17 +370,23 @@ function App() {
                     </div>
                     </div>
 
-                    {/* 💡 체인지(턴 패스) 버튼 추가 */}
+                    {/* 💡 내 차례일 때 조작 버튼들 ([Change Turn] 및 [Draw Card]) */}
                     {!isSpectator && gamePlayers[turnIndex]?.id === socket.id && (
-                    <div style={{ marginBottom: '15px' }}>
-                        <button 
-                        onClick={() => socket.emit('passTurn', { roomId: roomInfo.roomId })}
-                        style={{ backgroundColor: '#ffc107', color: '#000', fontWeight: 'bold', width: 'auto', padding: '10px 20px' }}
-                        >
-                        🔄 Change Turn (Pass)
-                        </button>
-                    </div>
-                    )}
+                        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '15px' }}>
+                            <button 
+                            onClick={() => socket.emit('toggleDirection', { roomId: roomInfo.roomId })}
+                            style={{ backgroundColor: '#ffc107', color: '#000', fontWeight: 'bold', width: 'auto', padding: '10px 15px' }}
+                            >
+                            🔄 Change Direction
+                            </button>
+                            <button 
+                            onClick={() => socket.emit('drawCard', { roomId: roomInfo.roomId })}
+                            style={{ backgroundColor: '#17a2b8', color: '#fff', fontWeight: 'bold', width: 'auto', padding: '10px 15px' }}
+                            >
+                            📥 Draw Card (+1)
+                            </button>
+                        </div>
+                        )}
 
                     {!isSpectator && (
                     <>
