@@ -1,0 +1,170 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.app-container {
+  display: flex;
+  max-width: 1300px;
+  margin: 30px auto;
+  gap: 20px;
+  padding: 0 15px;
+}
+
+.main-content {
+  flex: 1;
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-container {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.chat-box {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  display: flex;
+  flex-direction: column;
+  height: 260px;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  background: #f8f9fa;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+h1, h2, h3 {
+  color: #1a1a1a;
+  margin-top: 0;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #444;
+}
+
+input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+/* 💡 버튼 간격 및 배치 정리 (Create Room과 Back 버튼이 붙지 않도록 간격 확보) */
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: bold;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button.secondary {
+  background-color: #6c757d;
+}
+
+button.secondary:hover {
+  background-color: #5a6268;
+}
+
+button.danger {
+  background-color: #dc3545;
+  padding: 4px 8px;
+  font-size: 12px;
+  width: auto;
+}
+
+button.danger:hover {
+  background-color: #bd2130;
+}
+
+.player-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.player-list li {
+  padding: 8px 12px;
+  background: #eef2f7;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 💡 카드 스타일 시각화 풍부하게 개선 */
+.card-item {
+  width: 60px;
+  height: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffffff 0%, #f1f3f5 100%);
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 20px;
+  color: #1a1a1a;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0,123,255,0.3);
+  border-color: #0056b3;
+}
