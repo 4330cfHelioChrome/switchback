@@ -318,7 +318,7 @@ function App() {
                 return (
                   <li key={p.id} style={{ backgroundColor: isCurrentTurn ? '#d4edda' : '#eef2f7' }}>
                     <span>
-                      {index === 0 ? '👑 ' : '👤 '} {p.name} {isMe ? '(You)' : ''} {isCurrentTurn ? '⭐ (Turn)' : ''}
+                      {index === 0 ? '👑 ' : '👤 '} {p.name} {isMe ? '(You)' : ''} {isCurrentTurn ? '(Turn)' : ''}
                     </span>
                     {isHost && !isMe && gameState === 'waiting' && (
                       <button className="danger" onClick={() => handleKick(p.id)}>Kick</button>
@@ -333,7 +333,7 @@ function App() {
                 <p style={{ marginTop: '10px', fontWeight: '600' }}>Spectators ({roomInfo.spectators.length}):</p>
                 <ul className="player-list" style={{ background: '#f1f3f5' }}>
                   {roomInfo.spectators.map((s) => (
-                    <li key={s.id}><span>👀 {s.name} {s.id === socket.id ? '(You)' : ''}</span></li>
+                    <li key={s.id}><span>{s.name} {s.id === socket.id ? '(You)' : ''}</span></li>
                   ))}
                 </ul>
               </>
@@ -361,7 +361,7 @@ function App() {
                     <div>
                         <span style={{ fontSize: '13px', color: '#666', display: 'block' }}>DIRECTION</span>
                         <strong style={{ fontSize: '18px', color: direction === 'ascending' ? '#28a745' : '#dc3545' }}>
-                        {direction === 'ascending' ? '📈 Ascending (오름차순)' : '📉 Descending (내림차순)'}
+                        {direction === 'ascending' ? 'Ascending' : 'Descending'}
                         </strong>
                     </div>
                     <div>
@@ -377,13 +377,13 @@ function App() {
                             onClick={() => socket.emit('toggleDirection', { roomId: roomInfo.roomId })}
                             style={{ backgroundColor: '#ffc107', color: '#000', fontWeight: 'bold', width: 'auto', padding: '10px 15px' }}
                             >
-                            🔄 Change Direction
+                            Change Direction
                             </button>
                             <button 
                             onClick={() => socket.emit('drawCard', { roomId: roomInfo.roomId })}
                             style={{ backgroundColor: '#17a2b8', color: '#fff', fontWeight: 'bold', width: 'auto', padding: '10px 15px' }}
                             >
-                            📥 Draw Card (+1)
+                            Draw Card (+1)
                             </button>
                         </div>
                         )}
